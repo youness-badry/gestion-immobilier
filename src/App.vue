@@ -1,5 +1,7 @@
 <template>
+
   <div id="app">
+
     <Nav />
     <main class="form-signin">
       <router-view />
@@ -12,6 +14,7 @@
 <script>
 
 import Nav from "@/components/Nav";
+
 export default {
   name: 'App',
   components: { Nav }

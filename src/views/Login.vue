@@ -1,11 +1,9 @@
 <template>
 
-
-
-      <form>
+      <form @submit.prevent="submit">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-        <input type="email" class="form-control" placeholder="Email">
-        <input type="password" class="form-control" placeholder="Password">
+        <input type="email" class="form-control" v-model="email" placeholder="Email">
+        <input type="password" class="form-control" v-model="password" placeholder="Password">
 
         <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
 
@@ -17,8 +15,34 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  name: "Login"
+  name: "Login",
+  data() {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    submit() {
+      const data = {
+        email: this.email,
+        password: this.password,
+      };
+
+      axios.post('http://localhost:8080/api/authentication/register',data)
+        .then(
+          res => {
+            console.log(res);
+          }
+        ).catch(
+        err => {
+          console.log(err);
+        }
+      );
+    }
+  }
 };
 </script>
 
