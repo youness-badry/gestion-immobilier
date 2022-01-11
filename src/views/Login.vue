@@ -1,28 +1,90 @@
 <template>
+  <v-row justify="center" align="center">
+    <v-container
+        class="py-0"
+        fill-height
+        fluid
+    >
+      <v-row
+          class="py-0"
+          align="center"
+          justify="center"
+      >
+        <v-col>
+          <v-card
+              class="mx-auto py-4"
+              max-width="560"
+              outlined
+          >
+            <v-card-title class="px-6">
+              Login
+            </v-card-title>
 
-      <form @submit.prevent="submit">
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-        <input type="text" class="form-control mb-1" v-model="email" placeholder="Email">
-        <input type="password" class="form-control mb-1" v-model="password" placeholder="Password">
+            <v-card-text class="px-6 py-0">
+              <v-form
+                  ref="loginForm"
+                  lazy-validation
+                  @keyup.native.enter="submit"
+              >
+                <v-text-field
+                    v-model="email"
+                    label="Email"
+                    name="email"
+                    outlined
+                />
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-
-      </form>
-
+                <v-text-field
+                    v-model="password"
+                    type="password"
+                    name="password"
+                    label="password"
+                    outlined
+                />
+              </v-form>
+            </v-card-text>
+            <v-card-actions class="px-6">
+              <v-row>
+                <v-col>
+                  <v-btn
+                      class="mt-4 mr-4"
+                      block
+                      large
+                      color="primary"
+                      @click="submit"
+                  >
+                    Login
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn
+                      to="/register"
+                      class="mt-4 mr-4"
+                      block
+                      large
+                      color="secondary"
+                  >
+                    Register
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-row>
 
 
 
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: "Login",
   data() {
     return {
       email: '',
       password: '',
-      response: '',
     }
   },
   methods: {
@@ -39,11 +101,12 @@ export default {
         }
       }
 
-      axios.post('http://localhost:8080/api/login',params,config)
+      this.$http.post('api/login',params,config)
         .then(
           res => {
             console.log(res);
-            this.response = res;
+            localStorage.setItem('access_token', res.data.access_token);
+            this.$http.defaults.headers.common['Authorization'] = 'Bearer '+localStorage.getItem('access_token');
           }
         ).catch(
         err => {
@@ -51,10 +114,6 @@ export default {
         }
       );
 
-      /*localStorage.setItem('access_token', this.response.data.token);*/
-      console.log(this.response.data.data());
-      /*console.log(this.response.data.token);
-      console.log(localStorage.getItem('access_token'));*/
     }
   }
 };

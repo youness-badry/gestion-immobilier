@@ -45,7 +45,7 @@ export default {
         adresse: this.adresse,
       };
 
-      axios.post('http://127.0.0.1:8080/api/authentication/register',data)
+      axios.post('api/authentication/register',data)
           .then(
               res => {
                 console.log(res);

@@ -1,22 +1,34 @@
 <template>
-    <Sidebar />
+  <v-container >
+    <v-row >
+    <v-col cols="3"> <CardAnnonce v-for="(annonce, index) in annonces" :key="index" :annonce="annonce"/></v-col>
+    <v-col cols="9"> Test</v-col>
+
+  </v-row>
+  </v-container>
+
 
 </template>
 
 <script>
-import axios from "axios";
 import Sidebar from "@/components/Sidebar";
+import CardAnnonce from "@/components/CardAnnonce";
 export default {
   name: "UserHome",
-  components: { Sidebar },
+  components: {CardAnnonce },
+  data() {
+    return {
+      annonces: [
+        { title: 'test 1'},
+        { title: 'test 2'},
+        { title: 'test 3'},
+      ]
+    }
+  },
   created() {
 
-    const config = {
-      headers: {
-        'Authorization': 'Bearer '+localStorage.getItem('access_token')
-      }
-    }
-    axios.get('http://localhost:8080/api/users/userById?id='+10,config)
+
+    this.$http.get('api/users/userById?id='+10)
         .then(
             res => {
               console.log(res);
