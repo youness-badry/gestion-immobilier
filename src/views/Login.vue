@@ -2,8 +2,8 @@
 
       <form @submit.prevent="submit">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-        <input type="email" class="form-control" v-model="email" placeholder="Email">
-        <input type="password" class="form-control" v-model="password" placeholder="Password">
+        <input type="text" class="form-control mb-1" v-model="email" placeholder="Email">
+        <input type="password" class="form-control mb-1" v-model="password" placeholder="Password">
 
         <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
 
@@ -21,33 +21,46 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      response: '',
     }
   },
   methods: {
     submit() {
-      const data = {
-        email: this.email,
-        password: this.password,
-      };
 
-      axios.post('http://localhost:8080/api/authentication/register',data)
+      const params = new URLSearchParams()
+      params.append('username', this.email)
+      params.append('password', this.password)
+
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+
+      axios.post('http://localhost:8080/api/login',params,config)
         .then(
           res => {
             console.log(res);
+            this.response = res;
           }
         ).catch(
         err => {
           console.log(err);
         }
       );
+
+      /*localStorage.setItem('access_token', this.response.data.token);*/
+      console.log(this.response.data.data());
+      /*console.log(this.response.data.token);
+      console.log(localStorage.getItem('access_token'));*/
     }
   }
 };
 </script>
 
 <style>
-
 
 .form-signin {
   width: 100%;
