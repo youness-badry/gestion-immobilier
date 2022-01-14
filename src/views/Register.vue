@@ -1,26 +1,78 @@
 <template>
-  <form @submit.prevent="submit">
-    <h1 class="h3 mb-3 fw-normal">Please register</h1>
-    <input v-model="userName" class="form-control mb-1" placeholder="Name" >
-    <input v-model="email" type="email" class="form-control mb-1" placeholder="Email">
-    <input v-model="password" type="password" class="form-control mb-1" placeholder="Password">
-    <input v-model="telephone" class="form-control mb-1" placeholder="Telephone">
-    <div class="input-group mb-1">
-      <span class="input-group-text" id="select">Role</span>
-      <select v-model="role" class="form-select" aria-label="Default select" aria-describedby="select">
-        <option value="USER">USER</option>
-        <option value="ADMIN">ADMIN</option>
-      </select>
-    </div>
-    <input v-model="adresse" class="form-control mb-1" placeholder="Adresse">
+  <v-row justify="center" align="center">
+    <v-container class="py-0" fill-height fluid>
+      <v-row class="py-0" align="center" justify="center">
+        <v-col>
+          <v-card class="mx-auto py-4" max-width="560" outlined>
+            <v-card-title class="px-6"> Register </v-card-title>
 
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-
-  </form>
+            <v-card-text class="px-6 py-0">
+              <v-form
+                ref="registerForm"
+                lazy-validation
+                @keyup.native.enter="submit"
+              >
+                <v-text-field
+                  v-model="userName"
+                  label="Name"
+                  name="name"
+                  outlined
+                />
+                <v-text-field
+                  v-model="email"
+                  label="Email"
+                  name="email"
+                  outlined
+                />
+                <v-text-field
+                  v-model="password"
+                  type="password"
+                  name="password"
+                  label="Password"
+                  outlined
+                />
+                <v-text-field
+                  v-model="telephone"
+                  label="Telephone"
+                  name="telephone"
+                  outlined
+                />
+                <v-select
+                  :items="['admin', 'user']"
+                  label="Role"
+                  outlined
+                ></v-select>
+                <v-text-field
+                  v-model="adresse"
+                  label="Adresse"
+                  name="adresse"
+                  outlined
+                />
+              </v-form>
+            </v-card-text>
+            <v-card-actions class="px-6">
+              <v-row>
+                <v-col>
+                  <v-btn
+                    class="mt-4 mr-4"
+                    block
+                    large
+                    color="primary"
+                    @click="submit"
+                  >
+                    Submit
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-row>
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: "Register",
   data() {
@@ -30,8 +82,7 @@ export default {
       password: "",
       telephone: "",
       role: "",
-      adresse: ""
-
+      adresse: "",
     };
   },
   methods: {
@@ -39,30 +90,22 @@ export default {
       const data = {
         userName: this.userName,
         email: this.email,
-        password:this.password,
+        password: this.password,
         telephone: this.telephone,
         role: this.role,
         adresse: this.adresse,
       };
 
-      axios.post('api/authentication/register',data)
-          .then(
-              res => {
-                console.log(res);
-              }
-          ).catch(
-            err => {
-              console.log(err);
-            }
-      );
-
-      this.$router.push('/login');
-    }
-
-
-  }
-
-
+      this.$http
+        .post("api/authentication/register", data)
+        .then((res) => {
+          console.log(res);
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
 };
 </script>
-
